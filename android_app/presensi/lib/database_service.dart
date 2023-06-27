@@ -34,9 +34,9 @@ class SignInService {
 class DataBarangService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> createData(String kategori,String namaBarang, String hargaModal, String hargaJual, String jumlahBarang) async {
+  Future<void> createData(String kodeBarang,String kategori,String namaBarang, String hargaModal, String hargaJual, String jumlahBarang) async {
     try {
-      await _firestore.collection('barang').add({
+      await _firestore.collection('barang').doc(kodeBarang).set({
         'kategori': kategori,
         'namaBarang': namaBarang,
         'hargaModal': hargaModal,

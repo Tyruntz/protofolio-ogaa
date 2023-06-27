@@ -1,8 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:presensi/database_service.dart';
 import 'package:presensi/login.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:presensi/data_barang.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -14,6 +19,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String kategori = 'SmartPhone';
   int current_index = 0;
+  TextEditingController kodeBarang = TextEditingController();
   TextEditingController namaBarang = TextEditingController();
   TextEditingController hargaModal = TextEditingController();
   TextEditingController hargaJual = TextEditingController();
@@ -24,7 +30,16 @@ class _HomepageState extends State<Homepage> {
     super.initState();
   }
 
+  Future scanQR() async {
+    await Permission.camera.request();
+    String? cameraScanResult = await scanner.scan();
+    setState(() {
+      kodeBarang.text = cameraScanResult!;
+    });
+  }
+
   void clear() {
+    kodeBarang.clear();
     namaBarang.clear();
     hargaModal.clear();
     hargaJual.clear();
@@ -81,7 +96,9 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/iphone.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'SmartPhone',)));
+                      }, icon: Image.asset('assets/icon/iphone.png')),
                     ),
                   ),
                   SizedBox(width: 35),  
@@ -91,7 +108,9 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/laptop-screen.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'Laptop',)));
+                      }, icon: Image.asset('assets/icon/laptop-screen.png')),
                     ),
                   ),
                 ],
@@ -109,7 +128,10 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/smartwatch.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'SmartWatch',)));
+                      
+                      }, icon: Image.asset('assets/icon/smartwatch.png')),
                     ),
                   ),
                   SizedBox(width: 35),  
@@ -119,7 +141,9 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/smart-tv.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'SmartTV',)));
+                      }, icon: Image.asset('assets/icon/smart-tv.png')),
                     ),
                   ),
                 ],
@@ -137,7 +161,9 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/headset.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'Headset',)));
+                      }, icon: Image.asset('assets/icon/headset.png')),
                     ),
                   ),
                   SizedBox(width: 35),  
@@ -147,7 +173,9 @@ class _HomepageState extends State<Homepage> {
                       height: 100,
                       width: 100,
                       decoration: customBox(),
-                      child: IconButton(onPressed: (){}, icon: Image.asset('assets/icon/phone-charger.png')),
+                      child: IconButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DataBarang(kategori: 'Charger',)));
+                      }, icon: Image.asset('assets/icon/phone-charger.png')),
                     ),
                   ),
                 ],
@@ -159,8 +187,8 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
       const Text('History'),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      ListView(
+       scrollDirection: Axis.vertical,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -169,6 +197,27 @@ class _HomepageState extends State<Homepage> {
               children: [
                 Text('Tambah Barang', style: customText()),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 55,
+              decoration: customBox(),
+              child: TextField(
+                controller: kodeBarang,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Kode Barang',
+                  suffixIcon: InkWell(
+                    onTap : (){
+                      scanQR();
+                    },
+                    child: Icon(Icons.qr_code_scanner),
+                  ),
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+              ),
             ),
           ),
           Padding(
@@ -301,7 +350,7 @@ class _HomepageState extends State<Homepage> {
                   onPressed: () {
                     BuildContext context = this.context;
                     try {
-                      DataBarangService().createData(kategori, namaBarang.text,
+                      DataBarangService().createData(kodeBarang.text,kategori, namaBarang.text,
                           hargaModal.text, hargaJual.text, jumlahBarang.text);
                       CoolAlert.show(
                           context: context,
