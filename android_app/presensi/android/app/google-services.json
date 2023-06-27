@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "591885726415",
+    "project_id": "helloworld-a9c28",
+    "storage_bucket": "helloworld-a9c28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591885726415:android:d6a50cfea17eff0fa97dba",
+        "android_client_info": {
+          "package_name": "com.example.presensi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591885726415-vg362c45re6j52s8pruje1r7g8ur5jn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs6XFo-YENRXa1SrEhFfnGDBQpbKwxXc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591885726415-vg362c45re6j52s8pruje1r7g8ur5jn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

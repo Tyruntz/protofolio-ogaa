@@ -1,6 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:presensi/firebase_options.dart';
 import 'package:presensi/login.dart';
 
 void main(List<String> args) {
-  runApp(MaterialApp(home: LoginForm(),));
+  WidgetsFlutterBinding.ensureInitialized();
+   Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginForm(),
+    );
+  }
 }
