@@ -14,6 +14,35 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  void pressLogin(){
+    try {
+      if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email atau Password tidak boleh kosong'),
+          ),
+        );
+      } else {
+        DatabaseService().signIn(usernameController.text, passwordController.text);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Homepage()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Gagal Login'),
+        ),
+      );
+      print(e);
+      
+    }
+
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +64,7 @@ class _LoginFormState extends State<LoginForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: usernameController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 hintText: 'Masukkan Username',
@@ -44,6 +74,7 @@ class _LoginFormState extends State<LoginForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
 
@@ -56,90 +87,7 @@ class _LoginFormState extends State<LoginForm> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                try {
-                  DatabaseService().signIn(usernameController.text, passwordController.text);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Berhasil Login'),
-                    ),
-                  );
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Homepage()));
-                } catch (e) {
-                 if (e == 'user-not-found') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('User tidak ditemukan'),
-                    ),
-                  );
-                 } else if (e == 'wrong-password') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Password salah'),
-                    ),
-                  );
-                 } else if (e == 'invalid-email') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email tidak valid'),
-                    ),
-                  );
-                 } else if (e == 'user-disabled') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('User dinonaktifkan'),
-                    ),
-                  );
-                 } else if (e == 'too-many-requests') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Terlalu banyak percobaan login'),
-                    ),
-                  );
-                 } else if (e == 'operation-not-allowed') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Operasi tidak diizinkan'),
-                    ),
-                  );
-                 } else if (e == 'weak-password') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Password terlalu lemah'),
-                    ),
-                  );
-                 } else if (e == 'email-already-in-use') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email sudah digunakan'),
-                    ),
-                  );
-                 } else if (e == 'invalid-email') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email tidak valid'),
-                    ),
-                  );
-                 } else if (e == 'operation-not-allowed') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Operasi tidak diizinkan'),
-                    ),
-                  );
-                 } else if (e == 'weak-password') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Password terlalu lemah'),
-                    ),
-                  );
-                 } else if (e == 'email-already-in-use') {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email sudah digunakan'),
-                    
-                    )
-                  );
-                }
-              };
+                pressLogin();
               },
               child: const Text('Login'),
             ),

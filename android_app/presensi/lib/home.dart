@@ -11,7 +11,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late BuildContext _context;
   int current_index = 0;
 
   @override
@@ -23,7 +22,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
 
     List<Widget> pages = [
     const Text('Home'),
@@ -32,9 +30,10 @@ class _HomepageState extends State<Homepage> {
       onPressed: () {
         try {
           DatabaseService().signOut();
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => LoginForm()),
+            (Route<dynamic> route) => false,
           );
         } catch (e) {
           print(e.toString());
@@ -44,7 +43,7 @@ class _HomepageState extends State<Homepage> {
     )
   ];
 
-  
+
     return Scaffold(
       body: Container(
         color: Colors.blueAccent,

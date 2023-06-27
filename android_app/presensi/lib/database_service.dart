@@ -15,7 +15,7 @@ class DatabaseService {
 
   Future<void> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+     UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       print(e.toString());
     }
