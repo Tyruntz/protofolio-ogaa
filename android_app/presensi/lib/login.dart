@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:presensi/database_service.dart';
 import 'package:presensi/home.dart';
@@ -15,7 +16,7 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  void pressLogin(){
+  void pressLogin() {
     try {
       if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -24,7 +25,8 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       } else {
-        DatabaseService().signIn(usernameController.text, passwordController.text);
+        SignInService()
+            .signIn(usernameController.text, passwordController.text);
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const Homepage()),
@@ -38,11 +40,9 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
       print(e);
-      
     }
-
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +77,6 @@ class _LoginFormState extends State<LoginForm> {
               controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
-
                 border: UnderlineInputBorder(),
                 hintText: 'Masukkan Password',
               ),
@@ -95,67 +94,72 @@ class _LoginFormState extends State<LoginForm> {
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Belum punya akun? Daftar disini')),
-          TextButton(onPressed: (){
-            showModalBottomSheet(context: context, builder: (context) => ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Text('Daftar', style: TextStyle(fontSize: 30)),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: email,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Masukkan Email',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: password,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Masukkan Password',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      try {
-                        DatabaseService().signUp(email.text, password.text);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Berhasil Mendaftar'),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Gagal Mendaftar'),
-                          ),
-                        );
-                        Navigator.pop(context);
-                        print(e);
-                      }
-                      
-                    },
-                    child: const Text('Daftar'),
-                  ),
-                ),
-              ],
-            ) );
-          }, child: const Text('Daftar'))
+          TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) => ListView(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Text('Daftar',
+                                      style: TextStyle(fontSize: 30)),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: email,
+                                decoration: const InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  hintText: 'Masukkan Email',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: password,
+                                decoration: const InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  hintText: 'Masukkan Password',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  try {
+                                    SignInService()
+                                        .signUp(email.text, password.text);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Berhasil Mendaftar'),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Gagal Mendaftar'),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                    print(e);
+                                  }
+                                },
+                                child: const Text('Daftar'),
+                              ),
+                            ),
+                          ],
+                        ));
+              },
+              child: const Text('Daftar'))
         ],
       ),
     );

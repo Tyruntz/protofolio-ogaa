@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DatabaseService {
+class SignInService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> signUp(String email, String password) async {
@@ -29,3 +30,35 @@ class DatabaseService {
     }
   }
 }
+
+class DataBarangService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> createData(String kategori,String namaBarang, String hargaModal, String hargaJual, String jumlahBarang) async {
+    try {
+      await _firestore.collection('barang').add({
+        'kategori': kategori,
+        'namaBarang': namaBarang,
+        'hargaModal': hargaModal,
+        'hargaJual': hargaJual,
+        'jumlahBarang': jumlahBarang,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateData(String namaBarang, String hargaModal, String hargaJual, String jumlahBarang) async {
+    try {
+      await _firestore.collection('barang').doc().update({
+        'namaBarang': namaBarang,
+        'hargaModal': hargaModal,
+        'hargaJual': hargaJual,
+        'jumlahBarang': jumlahBarang,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+}
+

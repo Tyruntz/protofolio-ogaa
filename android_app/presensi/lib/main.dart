@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:presensi/firebase_options.dart';
-import 'package:presensi/login.dart';
+import 'package:presensi/home.dart';
+// import 'package:presensi/login.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginForm(),
+      home: Homepage(),
     );
   }
 }
