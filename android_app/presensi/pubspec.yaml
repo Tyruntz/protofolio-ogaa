@@ -42,6 +42,8 @@ dependencies:
   cool_alert: ^2.0.1
   qrscan: ^0.3.3
   permission_handler: ^10.3.0
+  firebase_storage: ^11.2.4
+  image_picker: ^1.0.0
 
 dev_dependencies:
   flutter_test:
